@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const userRoutes = require("./routes/userRoutes");
 const viewRoutes = require("./routes/viewRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
 
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 // Use routes
 app.use("/users", userRoutes);
+app.use("/message", messageRoutes);
 app.use("/", viewRoutes);
 
 module.exports = app;
