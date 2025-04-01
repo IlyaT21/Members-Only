@@ -1,4 +1,9 @@
 <div class="content-holder">
   <h1>Add a Message</h1>
-  <form action="" method="post"></form>
+  <form action="/message" method="post">
+    <input type="hidden" name="userId" value="<%=user.id%>" />
+    <label for="content">Add text to the post</label>
+    <textarea name="content" id="content" required></textarea>
+    <input type="submit" value="Publish" />
+  </form>
 </div>

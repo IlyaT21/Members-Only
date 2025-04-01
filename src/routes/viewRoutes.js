@@ -2,10 +2,17 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const User = require("../models/User");
+const Message = require("../models/Message");
 
 // Render Home Page
-router.get("/", (req, res) => {
-  res.render("index", { title: "Home Page" });
+router.get("/", async (req, res) => {
+  try {
+    const messages = await Message.findAll();
+    res.render("index", { title: "Home", messages });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error loading homepage");
+  }
 });
 
 // Login Page

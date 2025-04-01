@@ -10,4 +10,19 @@
     <a href="/logout">Logout</a>
     <% } %>
   </nav>
+  <div class="messages-holder">
+    <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
+    <div class="message">
+      <p>
+        <strong
+          ><%= message.User ? message.User.username : "Anonymous" %>:</strong
+        >
+        <%= message.content %>
+      </p>
+      <small>Posted on <%= message.createdAt.toLocaleDateString() %></small>
+    </div>
+    <% }) %> <% } else { %>
+    <p>No messages yet. Be the first to post!</p>
+    <% } %>
+  </div>
 </div>

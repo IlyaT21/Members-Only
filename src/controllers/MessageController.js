@@ -5,7 +5,7 @@ exports.createMessage = async (req, res) => {
   try {
     const { content, userId } = req.body;
     const newMessage = await Message.create({ content, userId });
-    res.status(201).json(newMessage);
+    res.redirect("/");
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
