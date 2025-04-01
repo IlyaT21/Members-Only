@@ -1,8 +1,13 @@
 <div class="content-holder">
   <h1>Members Only App</h1>
   <nav>
+    <% if (!user) { %>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
+    <% } else { %>
     <a href="/passcode">Enter a passcode</a>
+    <a href="/add-message">Add a Message</a>
+    <a href="/logout">Logout</a>
+    <% } %>
   </nav>
 </div>
