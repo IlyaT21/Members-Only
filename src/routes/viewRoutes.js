@@ -7,7 +7,15 @@ const Message = require("../models/Message");
 // Render Home Page
 router.get("/", async (req, res) => {
   try {
-    const messages = await Message.findAll();
+        const messages = await Message.findAll({
+          include: [
+            {
+              model: User,
+              attributes: ["username"],
+            },
+          ],
+          order: [["createdAt", "DESC"]],
+        });
     res.render("index", { title: "Home", messages });
   } catch (err) {
     console.error(err);

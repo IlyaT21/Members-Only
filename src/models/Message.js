@@ -19,10 +19,10 @@ const Message = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: User, // References the User model
-        key: "id", // User's primary key
+        model: User,
+        key: "id"
       },
-      onDelete: "CASCADE", // If a user is deleted, delete their messages
+      onDelete: "CASCADE",
     },
   },
   {

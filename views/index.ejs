@@ -13,16 +13,18 @@
   <div class="messages-holder">
     <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
     <div class="message">
-      <p>
-        <strong
-          ><%= message.User ? message.User.username : "Anonymous" %>:</strong
-        >
-        <%= message.content %>
-      </p>
-      <small>Posted on <%= message.createdAt.toLocaleDateString() %></small>
+      <p><%= message.content %></p>
+      <% if (user && user.role !== "guest") { %>
+      <span><%= message.User ? message.User.username : "Anonymous" %></span>
+      <br />
+      <% } %>
+      <small
+        ><%= new Date(message.createdAt).toLocaleDateString("en-US") %></small
+      >
+      <hr />
     </div>
     <% }) %> <% } else { %>
-    <p>No messages yet. Be the first to post!</p>
+    <p>No messages found.</p>
     <% } %>
   </div>
 </div>
