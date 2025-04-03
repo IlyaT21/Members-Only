@@ -1,4 +1,12 @@
 <div class="content-holder">
   <h1>Enter a Passcode</h1>
   <a href="/">Home</a>
+  <form action="" method="POST">
+    <label for="passcode">Enter a passcode</label>
+    <input type="text" name="passcode" id="passcode" />
+    <input type="submit" value="Submit" />
+  </form>
+  <% if (typeof error !== "undefined" && error) { %>
+  <p style="color: red"><%= error %></p>
+  <% } %>
 </div>

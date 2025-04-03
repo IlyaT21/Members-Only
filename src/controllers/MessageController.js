@@ -31,3 +31,19 @@ exports.getMessageById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Delete message
+exports.deleteMessage = async (req, res) => {
+  // Check if admin
+  if (!req.isAuthenticated() || req.user.role !== "admin") {
+    return res.status(403).send("Unauthorized");
+  }
+
+  try {
+    await Message.destroy({ where: { id: req.params.id } });
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error deleting message:", err);
+    res.status(500).send("Error deleting message");
+  }
+};

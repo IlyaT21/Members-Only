@@ -14,13 +14,30 @@
     <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
     <div class="message">
       <p><%= message.content %></p>
+
+      <!-- Author -->
       <% if (user && user.role !== "guest") { %>
       <span><%= message.User ? message.User.username : "Anonymous" %></span>
       <br />
       <% } %>
+
       <small
         ><%= new Date(message.createdAt).toLocaleDateString("en-US") %></small
       >
+
+      <!-- Delete button -->
+      <% if (user && user.role === "admin") { %>
+      <form
+        action="/message/<%= message.id %>/delete"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit" onclick="return confirm('Are you sure?')">
+          Delete
+        </button>
+      </form>
+      <% } %>
+
       <hr />
     </div>
     <% }) %> <% } else { %>

@@ -3,19 +3,20 @@ const router = express.Router();
 const passport = require("passport");
 const User = require("../models/User");
 const Message = require("../models/Message");
+require("dotenv").config();
 
 // Render Home Page
 router.get("/", async (req, res) => {
   try {
-        const messages = await Message.findAll({
-          include: [
-            {
-              model: User,
-              attributes: ["username"],
-            },
-          ],
-          order: [["createdAt", "DESC"]],
-        });
+    const messages = await Message.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ["username"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
     res.render("index", { title: "Home", messages });
   } catch (err) {
     console.error(err);
@@ -76,10 +77,57 @@ router.get("/logout", (req, res) => {
 
 // Passocde Page
 router.get("/passcode", (req, res) => {
-  if (!req.isAuthenticated()) {
+  if (req.isAuthenticated()) {
     res.render("pages/auth/passcode", { title: "Enter a Passcode" });
   } else {
     res.redirect("/");
+  }
+});
+
+router.post("/passcode", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/"); // Ensure user is logged in
+  }
+
+  const enteredPasscode = req.body.passcode;
+  const memberPasscode = process.env.MEMBER_PASSCODE;
+  const adminPasscode = process.env.ADMIN_PASSCODE;
+
+  // Admin is checked first so if the code is the same,
+  // user always gets the admin role
+  if (enteredPasscode === adminPasscode) {
+    try {
+      // Update user role in the database
+      await User.update({ role: "admin" }, { where: { id: req.user.id } });
+
+      // Update session to reflect new role
+      req.user.role = "admin";
+      req.session.save(() => {
+        res.redirect("/");
+      });
+    } catch (err) {
+      console.error("Error updating user role:", err);
+      res.status(500).send("Internal Server Error");
+    }
+  } else if (enteredPasscode === memberPasscode) {
+    try {
+      // Update user role in the database
+      await User.update({ role: "member" }, { where: { id: req.user.id } });
+
+      // Update session to reflect new role
+      req.user.role = "member";
+      req.session.save(() => {
+        res.redirect("/");
+      });
+    } catch (err) {
+      console.error("Error updating user role:", err);
+      res.status(500).send("Internal Server Error");
+    }
+  } else {
+    res.render("pages/auth/passcode", {
+      title: "Enter a Passcode",
+      error: "Incorrect passcode. Try again.",
+    });
   }
 });
 
