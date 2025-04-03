@@ -1,47 +1,50 @@
 <div class="content-holder">
   <h1>Members Only App</h1>
-  <nav>
-    <% if (!user) { %>
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
-    <% } else { %>
-    <a href="/passcode">Enter a passcode</a>
-    <a href="/add-message">Add a Message</a>
-    <a href="/logout">Logout</a>
-    <% } %>
-  </nav>
-  <div class="messages-holder">
-    <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
-    <div class="message">
-      <p><%= message.content %></p>
-
-      <!-- Author -->
-      <% if (user && user.role !== "guest") { %>
-      <span><%= message.User ? message.User.username : "Anonymous" %></span>
-      <br />
+  <div class="container">
+    <nav>
+      <% if (!user) { %>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      <% } else { %>
+      <a href="/passcode">Enter a passcode</a>
+      <a href="/add-message">Add a Message</a>
+      <a href="/logout">Logout</a>
       <% } %>
+    </nav>
+    <div class="messages-holder">
+      <% if (messages.length > 0) { %> <% messages.forEach(message => { %>
+      <div class="message">
+        <p><%= message.content %></p>
 
-      <small
-        ><%= new Date(message.createdAt).toLocaleDateString("en-US") %></small
-      >
+        <!-- Author -->
+        <% if (user && user.role !== "guest") { %>
+        <span><%= message.User ? message.User.username : "Anonymous" %></span>
+        <br />
+        <% } %>
+        <div class="info">
+          <small
+            ><%= new Date(message.createdAt).toLocaleDateString("en-US")
+            %></small
+          >
 
-      <!-- Delete button -->
-      <% if (user && user.role === "admin") { %>
-      <form
-        action="/message/<%= message.id %>/delete"
-        method="POST"
-        style="display: inline"
-      >
-        <button type="submit" onclick="return confirm('Are you sure?')">
-          Delete
-        </button>
-      </form>
+          <!-- Delete button -->
+          <% if (user && user.role === "admin") { %>
+          <form
+            action="/message/<%= message.id %>/delete"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit" onclick="return confirm('Are you sure?')">
+              Delete
+            </button>
+          </form>
+          <% } %>
+        </div>
+        <hr />
+      </div>
+      <% }) %> <% } else { %>
+      <p>No messages found.</p>
       <% } %>
-
-      <hr />
     </div>
-    <% }) %> <% } else { %>
-    <p>No messages found.</p>
-    <% } %>
   </div>
 </div>
